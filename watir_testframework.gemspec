@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Web Application TestFramework}
   spec.description   = %q{Test framework based on Watir, Ruby, Git and Rspec}
-  spec.homepage      = "https://bitbucket.org/m38io/mm-testframework"
+  spec.homepage      = "https://github.com/vcharlem/watir_testframework.git"
   spec.license       = "MIT"
 
   spec.files         = ["lib/common.rb",

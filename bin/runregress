@@ -1,0 +1,71 @@
+#!/usr/bin/env ruby
+require "watir_testframework/version"
+require 'open3'
+require 'optparse'
+require 'common'
+require 'setup'
+include Common
+include Setup
+puts "Running: 'WatirTestframework: version:#{WatirTestframework::VERSION}'\n\n"
+
+opts = Setup::cml_options     #Lets grab the CommandLine Options
+
+unless opts[:projectname].nil?
+   binpath = File.expand_path(File.dirname(__FILE__)) + "\/"
+   Setup::unbundle_and_untar(binpath, opts[:projectname]) 
+   exit(0)
+end
+
+if (opts[:regression_file])
+   regressionlist = Common::regression_list(opts[:regression_file]) 
+end
+
+if ( regressionlist.nil? && opts[:testlist].nil? )
+   #  zero tests passed on cli, so use all the tests found   
+   rspec_testlist = Common::testlist_constructor (nil)
+else
+   # combine anything from regression file and/or test params
+   rl = regressionlist  ? regressionlist['test_list']  : []
+   tl = opts[:testlist] ? opts[:testlist]              : [] 
+   rspec_testlist = Common::testlist_constructor (rl.concat(tl))
+end
+
+puts "Preparing: #{rspec_testlist.length} tests for this regression\n\n" 
+
+rspec_testlist.map { |test| if !(test.include?('.rb')) then test.concat('.rb') end }
+
+rspec_testlist.each do |test|
+   test = Dir.pwd + '/tests/spec/'.concat(test)
+   if !File.exists?(test)
+      puts " Error found for:  #{test}"
+      raise RuntimeError.new "'#{File.basename(test)}' is not a valid file."
+   else
+      puts "#{File.basename(test)}: \t \t \t successfully validated."
+   end
+end
+
+puts "\nLaunching RSpec Regression Tests"
+rspec_testlist = rspec_testlist.map{|r| 'tests/spec/'.concat(r)}.join(", ")
+
+command_l = "rspec --pattern \"#{rspec_testlist}\""
+puts "\n\nRSpec with: #{command_l}"
+
+result2, err, status = Open3.capture3("#{command_l}")
+
+#Give user feedback without going into the regression logs
+reportfile = File.open(Dir.pwd + "/reports/#{logfilename}", "w")
+
+if err.length != 0
+   puts "ERROR FOUND, WRITING TO '#{reportfile.path}'"
+elsif result2.include? "Pending: "
+   puts "NO ERRORS FOUND, BUT INCOMPLETE SPEC FOUND. WRITING TO '#{reportfile.path}'"
+else
+   puts "NO ERRORS FOUND."
+end
+STDOUT.puts "Finished Spec Testing"
+$stdout.puts "Writing out report to log-file"
+
+reportfile.write("#{result2}")
+reportfile.write("Error: #{err}")
+
+$stdout.puts "Test Completed"

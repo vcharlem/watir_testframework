@@ -32,6 +32,7 @@ utility 'runregress' will launch rspec.
 Runregress expects rspec tests to live in `tests/spec directory`.
 
 example:
+
 `runregress --help`
 
 `runregress --test login_spec,register_spec`

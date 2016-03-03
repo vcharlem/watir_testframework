@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
                         "lib/watir_testframework.rb",
                         "lib/tar.rb",
                         "bin/compress_template",
+                        "lib/util_helpers.rb",
                         "bin/template/",
                         "lib/watir_testframework/version.rb"]
   spec.bindir        = "bin"

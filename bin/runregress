@@ -1,16 +1,17 @@
 #!/usr/bin/env ruby
-require "watir_testframework/version"
-require 'open3'
-require 'optparse'
-require 'common'
-require 'setup'
+require 'util_helpers'
 include Common
 include Setup
+
 puts "Running: 'WatirTestframework: version:#{WatirTestframework::VERSION}'\n\n"
 
 opts = Setup::cml_options     #Lets grab the CommandLine Options
 
 unless opts[:projectname].nil?
+   if (File.exists?(opts[:projectname]))
+      puts "#{opts[:projectname]} already exists..."
+      exit(1)
+   end
    binpath = File.expand_path(File.dirname(__FILE__)) + "\/"
    Setup::unbundle_and_untar(binpath, opts[:projectname]) 
    exit(0)

@@ -33,17 +33,13 @@ module Setup
 
 		   opts.banner = "Usage: runregress [options]"
 
-		   opts.on("-v", "--verbose", "Run in verbose mode") do|v|
-		      options[:verbose] = v
-		   end
-		   opts.on("-s", "--setup", "Setup new projet") do |s|
-		      options[:setup] = true
-		      scaffold
+		   opts.on("-h", "--help", "Display this screen") do |h|
+		      puts opts
+		      exit
 		   end
 
-		   opts.on('-l', '--logfile FILENAME', 'Write Log to FILE') do |file|
-		      options[:logfile] = file
-		      puts "using file name: #{file}"
+		   opts.on('-n', '--new PROJECTNAME','Create new project')do |projectname|
+		      options[:projectname] = projectname
 		   end
 
 		   opts.on('-r', '--test_list FILENAME', 'File with Tests for this regression') do |file|
@@ -54,14 +50,6 @@ module Setup
 		   opts.on('-t', '--test test1,test2', Array, 'tests to run') do |tests|
 		      options[:testlist] = tests
 		      puts "Running Tests: #{options[:testlist]}"
-		   end
-
-		   opts.on('-n', '--new PROJECTNAME','Create new project')do |projectname|
-		      options[:projectname] = projectname
-		   end
-		   opts.on("-h", "--help", "Display this screen") do |h|
-		      puts opts
-		      exit
 		   end
 		end.parse!
 		options

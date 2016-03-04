@@ -6,10 +6,16 @@ WatirTestframework takes advantage of widely used open source technologies such 
 
 It also encourages code sharing and the use of Pageobject Design patterns.
 
-Basic components of mTestFramework include:
-1.   Report
-2.   runregress utility
-3.   Standardtest directory.
+Basic components include:
+1. reporting (ie logging)
+2. utility for running tests
+3. directory structure 
+	- tests are expected to be in 'tests/spec/'
+	- reports are in expected to be in 'reports/'
+4. Chromedriver, is included for your convenience
+	- MacOSx is in 'bin/osx'
+	- need to add it to $PATH
+
 
 ## Installation
 

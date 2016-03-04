@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require 'util_helpers'
-include Common
-include Setup
+
 
 puts "Running: 'WatirTestframework: version:#{WatirTestframework::VERSION}'\n\n"
 
